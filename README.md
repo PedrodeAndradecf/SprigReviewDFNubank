@@ -40,6 +40,7 @@ O objetivo desta revisão é reforçar conceitos de desenvolvimento backend com 
 - Organização da API em camadas (ex.: controller, service, repository)
 
 ## Objetivo da revisão
+Aqui temos duas Entities com relacionamento bidirecional (@OneToMany / @ManyToOne), o que introduz conceitos de cascata, referência circular, e gerenciamento de ciclo de serialização JSON
 
 Reviewing an old project for study purposes.
 
