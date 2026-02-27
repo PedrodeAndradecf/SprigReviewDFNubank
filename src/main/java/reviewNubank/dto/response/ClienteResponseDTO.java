@@ -8,3 +8,4 @@ public record ClienteResponseDTO(
         List<ContatoResponseDTO> contatos
 ) {
 }
+

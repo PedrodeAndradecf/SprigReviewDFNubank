@@ -5,5 +5,5 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 
-public record ClientesRequetDTO(String nome, List<@Valid ContatoRequestDTO> contatos) {
+public record ClienteRequestDTO(String nome, List<@Valid ContatoRequestDTO> contatos) {
 }
