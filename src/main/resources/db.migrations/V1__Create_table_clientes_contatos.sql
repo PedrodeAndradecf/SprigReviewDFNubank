@@ -4,7 +4,7 @@ CREATE TABLE contatos (
                           telefone VARCHAR(20) NOT NULL,
                           cliente_id BIGINT NOT NULL,
 
-                          CONSTRAINT check_contato_valido CHECK (email IS NOT NULL OR telefone IS NOT NULL),
+                          CONSTRAINT check_contato_valido,
 
 
                           CONSTRAINT uk_contatos_email UNIQUE (email),
