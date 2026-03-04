@@ -29,6 +29,7 @@ public class ClienteService {
 
 
     public List<ClienteResponseDTO> listarTodos(){
+        //could just return her without the varaible...
         List<ClienteResponseDTO> clientes = clienteRepository.findAllComContatos().stream().map(ClienteMapper::toResponse)
                 .collect(Collectors.toList());
 

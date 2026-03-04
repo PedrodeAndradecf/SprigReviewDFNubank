@@ -1,6 +1,7 @@
 package reviewNubank.controller;
 
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +26,7 @@ public class ClienteController {
 
 
     @PostMapping
-    public ResponseEntity<ClienteResponseDTO> cadastrarCliente(@RequestBody ClienteRequestDTO dto){
+    public ResponseEntity<ClienteResponseDTO> cadastrarCliente(@RequestBody @Valid ClienteRequestDTO dto){
         ClienteResponseDTO clienteSalvoDto = clienteService.salvarCliente(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvoDto);
     }

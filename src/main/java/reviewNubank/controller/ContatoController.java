@@ -1,8 +1,10 @@
 package reviewNubank.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reviewNubank.dto.request.ContatoRequestDTO;
@@ -21,7 +23,7 @@ public class ContatoController {
     }
 
     @PostMapping
-    public ResponseEntity<ContatoResponseDTO> cadastrarContato(ContatoRequestDTO dto, Cliente cliente){
+    public ResponseEntity<ContatoResponseDTO> cadastrarContato(@RequestBody @Valid ContatoRequestDTO dto){
         ContatoResponseDTO contatoSalvoDto = contatoService.salvarContato(dto);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(contatoSalvoDto);

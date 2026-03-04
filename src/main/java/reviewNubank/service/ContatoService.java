@@ -26,7 +26,7 @@ public class ContatoService {
     public ContatoResponseDTO salvarContato(ContatoRequestDTO dto){
 
         Cliente cliente = clienteRepository.findById(dto.clienteId())
-                .orElseThrow(() -> new ClienteNotFoundException(("Cliente não encontrado com id: " + dto.clienteId()));
+                .orElseThrow(() -> new ClienteNotFoundException(("Cliente não encontrado com id: " + dto.clienteId())));
 
 
         Contato contato = ContatoMapper.toEntity(dto, cliente);
