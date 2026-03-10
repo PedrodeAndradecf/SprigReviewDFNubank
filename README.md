@@ -1,46 +1,68 @@
-# Projeto Review
+# Projeto Review: API de Clientes e Contatos
 
-Projeto desenvolvido há cerca de 1 ano e revisitado agora para fins de estudo e revisão de conceitos.
+Projeto desenvolvido originalmente como **Desafio Nubank** e revisitado para fins de estudo, focado em **evolução arquitetural progressiva**: transformando um código funcional em um sistema profissional, resiliente e defensivo.
 
-## Sobre o projeto
+## 📝 Sobre o Projeto
 
-Esta API foi criada para gerenciar **clientes** e seus **contatos associados**, com operações básicas de cadastro e consulta.
+API REST para gestão de clientes e seus contatos (Telefone/E-mail), explorando relacionamentos **1:N (Um-para-Muitos) bidirecionais**. O repositório documenta a transição de uma estrutura frágil para padrões sólidos de mercado.
 
-O objetivo desta revisão é reforçar conceitos de desenvolvimento backend com Java e Spring Boot, além de boas práticas como uso de DTOs e mapeamento de relacionamentos entre entidades.
+## 🚀 Funcionalidades
 
-## Funcionalidades
+- **Gestão de Clientes:** Cadastro com lista opcional de contatos (persistência em cascata).
+- **Gestão de Contatos:** Cadastro avulso vinculado a um cliente existente.
+- **Consultas Otimizadas:** Listagem de clientes e seus contatos resolvendo o problema de performance N+1.
 
-- **Cadastro de clientes** (`POST /clientes`)
-- **Cadastro de contatos** associados a um cliente existente (`POST /contatos`)
-- **Listagem de todos os clientes** com seus contatos (`GET /clientes`)
-- **Listagem dos contatos** de um cliente específico (`GET /clientes/{id}/contatos`)
-
-## Endpoints
+## 🛣️ Endpoints
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| `POST` | `/clientes` | Cadastra um novo cliente |
-| `POST` | `/contatos` | Cadastra um contato para um cliente existente |
-| `GET` | `/clientes` | Lista todos os clientes com seus contatos |
-| `GET` | `/clientes/{id}/contatos` | Lista os contatos de um cliente específico |
+| `POST` | `/clientes` | Cadastra novo cliente (aceita contatos aninhados) |
+| `POST` | `/contatos` | Cadastra contato vinculado a um `clienteId` |
+| `GET` | `/clientes` | Lista todos os clientes e seus contatos |
+| `GET` | `/clientes/{id}/contatos` | Lista contatos de um cliente específico |
 
-## Tecnologias utilizadas
+## 🛠️ Tecnologias
 
-- **Java**
-- **Spring Boot**
-- **Spring Data JPA**
+- **Java 17+** & **Spring Boot 3**
+- **Spring Data JPA** & **Hibernate**
 - **PostgreSQL**
+- **Lombok** & **Bean Validation**
 
-## Boas práticas aplicadas
+---
 
-- Uso de **DTOs** para trafegar dados entre as camadas
-- Mapeamento de relacionamento entre entidades com:
-  - `@OneToMany`
-  - `@ManyToOne`
-- Organização da API em camadas (ex.: controller, service, repository)
+## 📈 Jornada de Evolução (Review)
 
-## Objetivo da revisão
-Aqui temos duas Entities com relacionamento bidirecional (@OneToMany / @ManyToOne), o que introduz conceitos de cascata, referência circular, e gerenciamento de ciclo de serialização JSON
+O projeto foi refatorado em 3 etapas para corrigir problemas comuns de arquitetura e design:
 
-Reviewing an old project for study purposes.
+### Quadro Comparativo
+| Conceito | V1 (Frágil) | V2/V3 (Upgrade) |
+| :--- | :--- | :--- |
+| **Arquitetura** | Controller acessava Repository | Camada de **Service** obrigatória |
+| **Injeção** | Field Injection (`@Autowired`) | **Constructor Injection** (Final fields) |
+| **DTOs** | Classes mutáveis (Lombok) | **Records** (Imutabilidade nativa) |
+| **Mapeamento** | Lógica duplicada na Service | **Mappers** (Utility Classes estáticas) |
+| **Validação** | Parcial ou ignorada | `@Valid` com cascata em Listas |
+| **Performance** | Problema **N+1** queries | `JOIN FETCH` + `DISTINCT` |
+| **Erros** | `RuntimeException` (500) | Exception de Negócio + `@RestControllerAdvice` |
 
+
+
+### Principais Melhorias Aplicadas
+* **Imutabilidade:** Uso de Java Records para garantir que os dados do contrato (API) não sejam alterados após a entrada.
+* **Relacionamento Bidirecional:** Implementação correta de `@OneToMany` e `@ManyToOne` com `mappedBy`, `cascade` e `orphanRemoval`.
+* **Serialização JSON:** Uso de `@JsonManagedReference` e `@JsonBackReference` para evitar recursão infinita no Jackson.
+* **Defesa em Profundidade:** Validação dupla — no nível de DTO (Bean Validation) e no nível de banco de dados (Constraints SQL).
+* **Código Limpo:** Remoção de injeções ocultas e centralização do tratamento de exceções para respostas HTTP semânticas (400, 404, 201).
+
+## 📂 Estrutura do Projeto (V3)
+
+```text
+src/main/java/reviewNubank/
+├── controller/  # Exposição dos recursos REST
+├── service/     # Regras de negócio e orquestração
+├── repository/  # Consultas JPQL otimizadas
+├── entities/    # Modelo de dados JPA
+├── dto/         # Records para Request e Response
+├── mapper/      # Conversores de entidade/DTO
+├── handler/     # Tratamento global de exceções
+└── exception/   # Exceções customizadas de negócio
